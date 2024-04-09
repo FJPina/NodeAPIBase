@@ -1,0 +1,14 @@
+services:
+  db:
+    image: "mysql"
+    container_name: "mySqlLocal"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3306:3306"
+    #volumes:
+      #- /Data:/var/lib/mysql
+networks : 
+  network1:
+    name: ScigarNetwork
+    external: true
