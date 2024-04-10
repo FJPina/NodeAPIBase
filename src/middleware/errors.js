@@ -1,7 +1,7 @@
 function error(message, codigo){
     let e = new Error(message);
-    if(code){
-        e.statusCode = code;
+    if(codigo){
+        e.statusCode = codigo;
     }
     return e;
 }

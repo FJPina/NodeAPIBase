@@ -66,7 +66,7 @@ function Eliminar(tabla, id){
 
 function Agregar(tabla, data){
     return new Promise((resolve, reject) => {
-        conexion.query(`insert into clientes (nombre, edad, profesion) values ('${data.nombre}', ${data.edad}, '${data.profesion}');`, (error, result)=>{
+        conexion.query(`insert into ${tabla} set ? on duplicate key update ?`, [data, data], (error, result)=>{
             return error ? reject(error) : resolve(result);
         });
     });
@@ -74,7 +74,16 @@ function Agregar(tabla, data){
 
 function Modificar(tabla, data){
     return new Promise((resolve, reject) => {
-        conexion.query(`update clientes set nombre = '${data.nombre}', edad = ${data.edad}, profesion = '${data.profesion}' where id = ${data.id};`, (error, result)=>{
+        conexion.query(`update ${tabla} set ? where id = ?`, [data, data.id] , (error, result)=>{
+            return error ? reject(error) : resolve(result);
+        });
+    });
+}
+
+function query(tabla,consulta){
+    return new Promise((resolve, reject) => {
+        conexion.query(`select * from ${tabla} where ? `, consulta, (error, result)=>{
+            //console.log(error, result)
             return error ? reject(error) : resolve(result);
         });
     });
@@ -85,5 +94,6 @@ module.exports = {
     Buscar,
     Agregar,
     Eliminar,
-    Modificar
+    Modificar,
+    query
 }

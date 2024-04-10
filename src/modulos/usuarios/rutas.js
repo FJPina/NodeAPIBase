@@ -3,13 +3,14 @@ const respuestas = require('../../red/repuestas');
 const controlador = require('./index');
 
 const router = express.Router();
+const seguridad = require('./seguridad');
 
 //Rutas
 router.get('/', Listar);
 router.get('/:id', Buscar);
-router.delete('/:id', Eliminar);
+router.delete('/:id', seguridad(), Eliminar);
 router.put('/', Modificar);
-router.post('/', Agregar);
+router.post('/', seguridad(), Agregar);
 
 
 //Funciones

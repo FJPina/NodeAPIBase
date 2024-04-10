@@ -1,6 +1,6 @@
+const auth = require('../auth');
 
-
-const tabla = 'clientes';
+const tabla = 'usuarios';
 
 module.exports = function(dbIny){
 
@@ -22,12 +22,45 @@ module.exports = function(dbIny){
         return db.Eliminar(tabla, id);
     }
     
-    function Agregar(data){
-        return db.Agregar(tabla, data);
+    async function Agregar(data){
+        const usuario = {
+            nombre: data.nombre,
+            activo: data.activo
+        }
+ 
+        const res = await db.Agregar(tabla, usuario);
+        var insertId = res.insertId;
+
+        if(data.usuario && data.password){
+            res2 = await auth.Agregar({
+                id: insertId,
+                usuario: data.usuario,
+                password: data.password
+            })
+        }
+
+        return res2;
     }
     
-    function Modificar(data){
-        return db.Modificar(tabla, data);
+    async function Modificar(data){
+        const usuario = {
+            id: data.id,
+            nombre: data.nombre,
+            activo: data.activo
+        } 
+ 
+        const res = db.Modificar(tabla, usuario);
+        let res2;
+        
+        if(data.usuario && data.password){
+            res2 = await auth.Agregar({
+                id: data.id,
+                usuario: data.usuario,
+                password: data.password
+            })
+        }
+
+        return res2;
     }
     
     return{
